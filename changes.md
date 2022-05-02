@@ -8,6 +8,6 @@
 
 **Abstract**
 
-For this project, we wanted to explore chronic wasting disease cervid populations in Minnesota and the United States as a whole. In order to accomplish this, we went to the Minnesota Department of Natural Wildlife Resources website and collected their data about CWD by putting it into a Google Sheet. After we had collected the appropriate data from Minnesota, we did the same thing with every state that has a confirmed positive case of CWD and compiled all of the data into a Google Sheet. Once we finished compiling all of our data, we read the data into RStudio, and used the software to create our graphs. We also used
+Chronic wasting disease (CWD) is a form of a group of diseases called transmissible spongiform encephalopathies (TSE). CWD is a growing concern for the future of not only deer populations, but for all cervid species, including mule deer, elk, and moose. We wanted to explore publicly available data from state wildlife agencies of Minnesota and all states with confirmed cases of CWD. We plan to look at the geographic distribution of incidence and prevalence of CWD in both Minnesota and the Untied States as a whole.
 
 **Table of Contents:** File 1 File 2 File 3 File 4
