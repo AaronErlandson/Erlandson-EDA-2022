@@ -30,11 +30,11 @@ Minnesota State University Moorhead Biosciences Department
 
     -   Spread through direct contact with bodily fluids, and indirectly through environmental contamination of soil, food, and water.
 
-    -   Charectoriszed by emaciation, abnormal behavior, loss of bodily functions, and eventually death.
+    -   Characterized by emaciation, abnormal behavior, loss of bodily functions, and eventually death.
 
     -   Has an incubation of over a year, and symptoms develop slowly over time.
 
-<img src="Poster picture 1.jpg" width="596"/>
+![image](https://user-images.githubusercontent.com/97974801/166318455-1b36809c-8e09-4cae-a7ce-e9b77f0a0d83.png)
 
 -   First discovered in Colorado
 
@@ -84,7 +84,6 @@ Minnesota State University Moorhead Biosciences Department
 
 ```{r read data and Figure 1, fig.height=4, fig.width=5, message=FALSE, warning=FALSE}
 #Thomas' stuff
-
 library(googlesheets4)
 library(tidyverse)
 library(urbnmapr)
