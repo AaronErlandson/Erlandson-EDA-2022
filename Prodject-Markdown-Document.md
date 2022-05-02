@@ -1,3 +1,8 @@
+---
+editor_options: 
+  markdown: 
+    wrap: 72
+---
 
 ## Exploring Chronic Wasting Disease in Minnesota and the United States
 
@@ -10,7 +15,7 @@ Minnesota State University Moorhead Biosciences Department
 -   Chronic Wasting Disease
 
     -   Always fatal, contagious, or transmissible spongiform
-        encephalopathy (TSE). Other TSE’s include Bovine sponigform
+        encephalopathy (TSE). Other TSE's include Bovine sponigform
         encephalopathy (mad cow disease) in cattle and Creutzfeldt-Jakob
         disease in humans.
 
@@ -81,7 +86,7 @@ Minnesota State University Moorhead Biosciences Department
             Sheet, read it into RStudio and used R and RStudio to
             analyze our data and create our graphs.
 
--   To collect our country wide data, we went to each state’s Department
+-   To collect our country wide data, we went to each state's Department
     of Natural Resources website, and used their public testing results.
 
     -   We gathered data for the total samples taken, total positive,
@@ -248,7 +253,7 @@ Figure 15: U.S. counties containing infections in captive cervids
 ## References
 
  Saunders SE, Bartelt-Hunt SL, Bartz JC. Occurrence, transmission, and
-zoonotic potential of chronic wasting disease. 2012;18(3):369–376.
+zoonotic potential of chronic wasting disease. 2012;18(3):369--376.
 (Emerging infectious diseases).
 <https://www.ncbi.nlm.nih.gov/pubmed/22377159.>
 <doi:10.3201/eid1803.110685>
