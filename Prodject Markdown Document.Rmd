@@ -84,6 +84,11 @@ Minnesota State University Moorhead Biosciences Department
 
 ```{r read data and Figure 1, fig.height=4, fig.width=5, message=FALSE, warning=FALSE}
 #Thomas' stuff
+install.packages("tidyverse")
+install.packages("googlesheets4")
+install.packages("devtools")
+library(devtools)
+devtools::install_github("UrbanInstitute/urbnmapr")
 library(googlesheets4)
 library(tidyverse)
 library(urbnmapr)
