@@ -1,0 +1,438 @@
+---
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	echo = FALSE,
+	message = FALSE,
+	warning = FALSE,
+	cache=TRUE
+)
+library(tidyverse)
+```
+
+## Exploring Chronic Wasting Disease in Minnesota and the United States
+
+Aaron Erlandson, Thomas Knutson
+
+Minnesota State University Moorhead Biosciences Department
+
+## Introduction
+
+-   Chronic Wasting Disease
+
+    -   Always fatal, contagious, or transmissible spongiform encephalopathy (TSE). Other TSE's include Bovine sponigform encephalopathy (mad cow disease) in cattle and Creutzfeldt-Jakob disease in humans.
+
+    -   Affects all members of the cervid (deer) family.
+
+    -   Caused by miss-folded prion protein.
+
+    -   Spread through direct contact with bodily fluids, and indirectly through environmental contamination of soil, food, and water.
+
+    -   Characterized by emaciation, abnormal behavior, loss of bodily functions, and eventually death.
+
+    -   Has an incubation of over a year, and symptoms develop slowly over time.
+
+![image](https://user-images.githubusercontent.com/97974801/166318455-1b36809c-8e09-4cae-a7ce-e9b77f0a0d83.png)
+
+-   First discovered in Colorado
+
+    -   First positive case in captive cervids in 1967
+
+    -   First positive wild case in wild cervids in 1981
+
+    -   Since then, cases have been discovered in 29 different states across the country
+
+-   Fatality rate
+
+    -   CWD has a 100% positivity fatality, and there is no cure or vaccination for it.
+
+    -   Monitoring is done to help track the spread of this disease and to help keep cervid populations safe.
+
+-   Sample collection
+
+    -   Testing lymph node samples is the most common way to test a cervid for potential CWD.
+
+    -   Testing the brain is also used, but less common.
+
+    -   Samples are generally acquired through agency culling, roadkill sampling, and hunter submitted samples.
+
+-   Future risk of potential spread to humans
+
+    -   Currently, CWD poses no threat to humans, as it cannot successfully infect us.
+
+    -   However, there is a small possibility it could one day jump the species and infect humans sometime in the future.
+
+    -   By studying CWD and tracking its spread, we will have a better understanding of the disease and how to combat it should it spread to humans.
+
+## Methods
+
+-   To collect our Minnesota data, we went to the Minnesota Department of Natural Resources website and used their public testing results.
+
+    -   We gathered data for the total samples and total positive samples taken, the age and sex of the deer, the zone that the deer was taken in, and how the deer were harvested.
+
+        -   Once we collected all our data, we gathered it into a Google Sheet, read it into RStudio and used R and RStudio to analyze our data and create our graphs.
+
+-   To collect our country wide data, we went to each state's Department of Natural Resources website, and used their public testing results.
+
+    -   We gathered data for the total samples taken, total positive, the species of the deer, and the year and state the sample was taken in.
+
+        -   Once we collected all of our data, we gathered it into a Google Sheet, combined all of the data from all of the analyzed states into one table, transferred it into RStudio, and used R and RStudio to analyze our data and create our graphs.
+
+## Results
+
+```{r read data and Figure 1, fig.height=4, fig.width=5, message=FALSE, warning=FALSE}
+#Thomas' stuff
+library(googlesheets4)
+library(tidyverse)
+library(urbnmapr)
+
+#Read google sheets data into R
+cwdpositive <- read_sheet('1bazVSrrfMWM6scjJzAvDXBw-EeX2BpK1BI1FRdx5GCk') %>% 
+  rename(permitarea=`Permit\nArea`, sampleacquisition=`Sample\nAcquisition`) %>% 
+  mutate(permitarea=factor(permitarea), Year = as.integer(Year))
+
+
+distributionofcwdinunitedstates <- read_sheet('https://docs.google.com/spreadsheets/d/1AJFJeUI25nDAGxogKNd7oA70r1roLoU92hv9408OR6Q/edit#gid=0')
+
+minnesotayearlysamplingdata <- read_sheet  ('https://docs.google.com/spreadsheets/d/1ABj6j_GxRa1dpEzdP5ipZHaDyJgaZrYWtITForcFfW4/edit#gid=0')                                            
+
+#Aaron's data stuff
+usa_cwd <- read_sheet("https://docs.google.com/spreadsheets/d/18nwJNkR9APotdyceGLIBKdA8ktHZqGjZSj1FsKNT7KY/edit#gid=0")
+
+#Data for captive cases by county for national map
+captivecountydata <- read_sheet('https://docs.google.com/spreadsheets/d/1Bqnrw1BbulGervJO2zODaUC6wX49SRcCu2zdQ57sNXw/edit#gid=0')
+
+#Data for wild cases by county for national map
+wildcountydata <- read_sheet('https://docs.google.com/spreadsheets/d/1kZsk7IcZDokeosX1HKxCdFl-Dp7uQa4y5KmcNyPrIoI/edit#gid=0')
+
+
+#Figure 1
+#MN Yearly Cases by Permit Area
+cwdpositive %>%
+  count(Year, permitarea) %>% 
+  ggplot() + 
+  geom_col(mapping = aes(x = Year, y = n, fill = permitarea))+
+  labs(y="Positive Cases", title = "MN Yearly Cases by Permit Area", fill = "Permit Area")
+
+```
+
+Figure 1: State totals for positive cases across state hunting permit areas per year
+
+```{r Figure 2, fig.height=3, fig.width=5.5}
+#Figure 2
+#Total samples collected, positive cases collected, positivity rate
+minnesotayearlysamplingdata %>% 
+  separate(Year, into = c("start year", "Year"), sep = "-") %>% 
+  group_by(Year) %>% 
+  summarise(Positive = sum(Positive), Samples = sum(Samples)) %>% 
+  mutate(`Positivity Rate`=Positive/Samples) %>% 
+  pivot_longer(cols = c(Samples, Positive, `Positivity Rate`), 
+               names_to = "Variable", values_to = "Value") %>% 
+  mutate(Variable=as_factor(Variable)) %>% 
+  ggplot(aes(x=Year, y=Value, fill = Variable))+
+  geom_col()+
+  facet_wrap(~Variable, scales = "free_y")+
+  guides(fill ="none")+
+  labs(x=NULL, y=NULL, title = "Total Samples, Positive Cases, and Positivity Rate")
+
+```
+
+Figure 2: State totals for total collected samples, positive cases, and positivity rare across the state per year
+
+```{r Figure 3, fig.height=3, fig.width=5}
+#Figure 3
+#This works Dots are small
+ggplot(data = minnesotayearlysamplingdata) + 
+  geom_point(mapping = aes(x = Year, y = Positive, color = `Zones Tested`))+
+  theme(axis.text.x = element_text(angle = 90)) +
+  labs(y="Positive Cases", title = "MN Yearly Cases by Sample Collection Zones", fill = "Permit Area", size = NULL)
+```
+
+Figure 3: State total positive case results based on the zone the sample was collected in.
+
+```{r Figure 4, fig.height=3, fig.width=5}
+#Figure 4
+#This works MN Yearly Cases by Age
+ggplot(data = cwdpositive) + 
+  geom_bar(mapping = aes(x = Year, fill = Age))+
+  labs(y="Positive Cases", title = "MN Yearly Cases by Age")
+
+  
+```
+
+Figure 4: State totals for positive cases by age per year
+
+```{r Figure 5, fig.height=3, fig.width=5}
+#Figure 5
+#This works MN Yearly Cases by Sex
+ggplot(data = cwdpositive) + 
+  geom_bar(mapping = aes(x = Year, fill = Sex))+
+  labs(y="Positive Cases", title = "MN Yearly Cases by Sex")
+```
+
+Figure 5: State totals for total positive cases by sex per year.
+
+```{r Figure 6, fig.height=3, fig.width=5}
+#Figure 6
+#Bar Chart sample acquisition
+ggplot(data = cwdpositive) + 
+  geom_bar(mapping = aes(x = Year, fill = sampleacquisition))+
+  labs(y="Positive Cases", title = "MN Yearly Cases by Sample Acquisition Method", fill = "Sample Acquisition", size = NULL)
+```
+
+Figure 6: State totals for positive cases by sample acquisition per year
+
+```{r Figure 7, fig.height=3, fig.width=5}
+#Figure 7
+# Bar chart of total_collected_samples vs year
+ggplot(data = usa_cwd,
+       mapping = aes(x = year)) +
+  geom_col(mapping = aes(y = total_collected_samples), fill = "#a6192e")+
+  labs(title = "Total Collected Samples per Year", y = "Total Collected Samples", x = "Year") 
+```
+
+Figure 7: Total samples collected across analyzed states per year
+
+```{r Figure 8, fig.height=4, fig.width=5.5}
+#Figure 8
+# Bar chart showing state vs total_positive_samples vs states
+usa_cwd %>%
+  group_by(state) %>% 
+  summarise(total_positive_samples = sum(total_positive_samples)) %>% 
+  arrange(desc(total_positive_samples)) %>% 
+  mutate(state = as_factor(state)) %>% 
+  ggplot(mapping = aes(x = state)) +
+  geom_col(mapping = aes(y = total_positive_samples), fill = "#a6192e") +
+  theme_gray(base_size =18 )+
+  theme(axis.text.x = element_text(angle = 90)) +
+  labs(y = "Total Positive Samples", x = NULL)
+
+```
+
+Figure 8: Total positive cases for each state with a confirmed positive case of CWD
+
+```{r Figure 9, fig.height=3, fig.width=5}
+#Figure 9
+# Bar chart of total_positive_samples vs year
+ggplot(data = usa_cwd,
+       mapping = aes(x = year)) +
+  geom_col(mapping = aes(y = total_positive_samples), fill = "#a6192e") +
+  labs(y = "Total Positive Samples", title = "Total Positive Samples Per Year", x = "Year")
+
+```
+
+Figure 9. Total positive samples by species across analyzed states per year.
+
+```{r Figure 10, fig.height=3, fig.width=5}
+#Figure 10
+# Bar chart showing species vs total_positive_samples
+ggplot(data = usa_cwd,
+       mapping = aes(x = species)) +
+  geom_col(mapping = aes(y = total_positive_samples), fill = "#a6192e")+
+  labs(y = "Total Positive Samples", title = "Total Positive Samples Per Year Per Species", x = "Year")
+```
+
+Figure 10: Total positive cases across analyzed states per year
+
+```{r Figure 11, fig.height=3, fig.width=5}
+#Figure 11
+# Bar chart showing species vs total_collected_samples
+ggplot(data = usa_cwd,
+       mapping = aes(x = species)) +
+  geom_col(mapping = aes(y = total_collected_samples), fill = "#a6192e")+
+  labs(title = "Total Collected Samples per Year", y = "Total Collected Samples", x = "Year") 
+```
+
+Figure 11: Total samples collected by species across analyzed states per year
+
+```{r Figure 12, fig.height=4, fig.width=6}
+#Figure 12
+#Map of States infected Free Ranging
+states %>% 
+  left_join(distributionofcwdinunitedstates, by = c("state_name"="State")) %>% 
+  ggplot(mapping = aes(long, lat, group = group, fill = `Free-ranging cervids`)) +
+  geom_polygon(color = "#ffffff", size = 0.25) +
+  coord_map(projection = "albers", lat0 = 39, lat1 = 45) +
+  labs(fill = "Infections?",
+       title="Wild Cervid Infections")+
+  theme_grey(base_size = 18)
+```
+
+Figure 12: U.S. states containing infections in wild cervids
+
+```{r Figure 13, fig.height=4, fig.width=6}
+#Figure 13
+#Map of captive cervids by state
+states %>% 
+  left_join(distributionofcwdinunitedstates, by = c("state_name"="State")) %>% 
+  ggplot(mapping = aes(long, lat, group = group, fill = `Captive cervids`)) +
+  geom_polygon(color = "#ffffff", size = 0.25) +
+  coord_map(projection = "albers", lat0 = 39, lat1 = 45) +
+  labs(fill = "Infections?",
+       title="Captive Cervid Infections")+
+  theme_grey(base_size = 18)
+```
+
+Figure 13: U.S. states containing infection in captive cervids
+
+```{r Figure 14, fig.height=4, fig.width=6}
+#Figure 14
+#Wild County Data, works, just need correct size.
+countydata <- counties %>%
+  left_join(wildcountydata %>%
+              mutate(Wild=1, County=paste0(County," County")), 
+            by=c("state_name"="State", "county_name"="County"))
+ggplot(countydata, mapping = aes(long, lat, group = group, fill = Wild)) +
+  geom_polygon(aes(color = Wild)) +
+  coord_map(projection = "albers", lat0 = 39, lat1 = 45) +
+  guides(fill="none")+
+  labs(fill = "Wild Infections", color = "Wild Infections",
+       title="Wild Cervid Infections by County")
+
+```
+
+Figure 14: U.S. counties containing infections in wild cervids
+
+```{r Figure 15, fig.height=4, fig.width=6}
+#Figure 15
+#Counties Captive, works
+captive <- counties %>%
+  left_join(captivecountydata %>%
+              mutate( County=paste0(County," County")), 
+            by=c("state_name"="State", "county_name"="County"))
+ggplot(captive, mapping = aes(long, lat, group = group, fill = Count)) +
+  geom_polygon(aes(color=Count)) +
+  coord_map(projection = "albers", lat0 = 39, lat1 = 45) +
+  labs(fill = "Captive Infections", color="Captive Infections",
+       title="Captive Cervid Infections by County")
+```
+
+Figure 15: U.S. counties containing infections in captive cervids
+
+```{r}
+#Mean
+```
+
+## Discussion
+
+-   Landscape of CWD in the United States
+
+    Based on our mapping of CWD cases across the United States, we found that the majority of positive cases were found in the Western and Midwestern states, with positive cases slowly appearing in the Southern and Eastern states.
+
+    -   Our results also show that the amount of positive CWD cases is increasing over time.
+
+    -   Testing should continue to be done in all states with confirmed cases in order to help track the spread of CWD.
+
+<!-- -->
+
+-   Data Acquisition
+
+    -   Collecting data for each state was difficult at times. Many states had a lack of total sampling data and missing sampling year. Many states also presented their data in different ways, so it was difficult at times to format the data for each state the same way.
+
+        -   We could not include Idaho in our data set due to a lack of provided data.
+
+    -   Despite these limitations in the data, we were still able to paint a broad picture of the landscape of CWD in both Minnesota and the United States as a whole
+
+-   Sample Acquisition
+
+    -   While we were gathering our Minnesota positive case data, we discovered that the majority of the samples were obtained from samples collected from hunters.
+
+        -   We also found this trend in the few states where sample acquisition methods was provided.
+
+    -   Hunters submitting their collected samples are important to tracking the progress of CWD.
+
+    -   Based on our data, state agencies could encourage hunters to submit samples from their harvested deer in order to increase the amount of samples available for testing.
+
+-   How people can provide samples
+
+    -   There are ways for people to provide voluntary samples for CWD testing.
+
+        -   At a staffed sampling station
+
+            -   Bring the deer to a staffed sampling station before it is frozen to make extraction of the lymph nodes easier
+
+            -   Have your hunting license ready and know the location the deer was harvested in: township, range and section level.
+
+        -   At self-service sampling station
+
+            -   Once at the sampling station, follow the listed instructions to properly submit your sample
+
+            -   Proper harvest information will be required otherwise the sample cannot be tested. This information includes township, range and section of harvest location.
+
+            -   Videos are provided online on what to do and expect at a sampling station
+
+    -   Sampling drop off locations are provided
+
+-   How are states handling the spread of CWD?
+
+    -   State measures for managing the spread of CWD include enforcing CWD requirements for wild and captive cervids, establishing state specific regulations, and conducting sampling of wild and captive cervids
+
+## References
+
+ Saunders SE, Bartelt-Hunt SL, Bartz JC. Occurrence, transmission, and zoonotic potential of chronic wasting disease. 2012;18(3):369--376. (Emerging infectious diseases). <https://www.ncbi.nlm.nih.gov/pubmed/22377159.> <doi:10.3201/eid1803.110685>
+
+Richards, B.J., 2021, Chronic Wasting Disease distribution in the United States by state and county: U.S. Geological Survey data release, <https://doi.org/10.5066/P9HQKKFO>.
+
+To see the list of state agencies we used to collect our national data as well as a map of Minnesota permit zones, scan this QR to visit the GitHub repository for this study where you can view this information.
+
+-   Minnesota: [Chronic wasting disease management \| Minnesota DNR (state.mn.us)](https://www.dnr.state.mn.us/cwd/index.html)
+
+-   Alabama: [CWD Information \| Outdoor Alabama](https://www.outdooralabama.com/CWD-Info)
+
+-   Arkansas: [CWD Testing Options (agfc.com)](https://www.agfc.com/en/hunting/big-game/deer/cwd/cwd-test/)
+
+-   Colorado: [Colorado Parks & Wildlife - Chronic Wasting Disease (state.co.us)](https://cpw.state.co.us/cwd)
+
+-   Illinois: [Chronic Wasting Disease Management - Chronic Wasting Disease (illinois.gov)](https://www2.illinois.gov/dnr/programs/CWD/Pages/default.aspx)
+
+-   Iowa: [Chronic Wasting Disease in Iowa \| Natural Resource Stewardship (iastate.edu)](https://naturalresources.extension.iastate.edu/wildlife/cwd)
+
+-   Kansas: [Cervids - Chronic Wasting Disease (CWD) (ks.gov)](https://agriculture.ks.gov/divisions-programs/division-of-animal-health/animal-diseases/chronic-wasting-disease-(cwd))
+
+-   Louisiana: [Chronic Wasting Disease \| Louisiana Department of Wildlife and Fisheries](https://www.wlf.louisiana.gov/page/cwd)
+
+-   Maryland: [Chronic Wasting Disease (CWD) In Maryland](https://dnr.maryland.gov/wildlife/Pages/hunt_trap/CWD_in_Maryland.aspx)
+
+-   Michigan: [Chronic Wasting Disease (michigan.gov)](https://www.michigan.gov/dnr/managing-resources/wildlife/cwd#:~:text=Chronic%20wasting%20disease%20has%20now,up%20with%20the%20latest%20news.)
+
+-   Mississippi: [MDWFP - Chronic Wasting Disease](https://www.mdwfp.com/wildlife-hunting/chronic-wasting-disease/)
+
+-   Missouri: [Chronic Wasting Disease \| Missouri Department of Conservation (mo.gov)](https://mdc.mo.gov/hunting-trapping/species/deer/chronic-wasting-disease#:~:text=Cards,CWD%20and%20limit%20its%20spread.)
+
+-   Montana: [CWD Management \| Montana FWP (mt.gov)](https://fwp.mt.gov/cwd)
+
+-   Nebraska: [Chronic Wasting Disease (CWD) - Nebraska Game and ParksNebraska Game and Parks \| (outdoornebraska.gov)](http://outdoornebraska.gov/cwd/)
+
+-   New Mexico: [Chronic Wasting Disease - New Mexico Department of Game & Fish (state.nm.us)](https://www.wildlife.state.nm.us/conservation/invasive-species-and-diseases/chronic-wasting-disease/)
+
+-   New York: [Chronic Wasting Disease - NYS Dept. of Environmental Conservation](https://www.dec.ny.gov/animals/7191.html)
+
+-   North Dakota: [Chronic Wasting Disease \| North Dakota Game and Fish](https://gf.nd.gov/wildlife/diseases/cwd)
+
+-   Ohio: [Chronic Wasting Disease (Deer) \| Ohio Department of Natural Resources (ohiodnr.gov)](https://ohiodnr.gov/buy-and-apply/hunting-fishing-boating/hunting-resources/chronic-wasting-disease)
+
+-   Oklahoma: [Chronic Wasting Disease (CWD) \| Oklahoma Department of Wildlife Conservation (wildlifedepartment.com)](https://www.wildlifedepartment.com/hunting/species/deer/cwd)
+
+-   Pennsylvania: [Chronic Wasting Disease (pa.gov)](https://www.pgc.pa.gov/Wildlife/Wildlife-RelatedDiseases/Pages/ChronicWastingDisease.aspx)
+
+-   South Dakota: [Chronic Wasting Disease (CWD) \| South Dakota Game, Fish, and Parks (sd.gov)](https://gfp.sd.gov/chronic-wasting-disease/)
+
+-   Tennessee: [Chronic Wasting Disease \| Tennessee State Wildlife Resources Agency (tn.gov)](https://www.tn.gov/twra/hunting/cwd.html)
+
+-   Texas: [Chronic Wasting Disease (texas.gov)](https://tpwd.texas.gov/huntwild/wild/diseases/cwd/)
+
+-   Utah: [Chronic wasting disease (utah.gov)](https://wildlife.utah.gov/chronic-wasting-disease.html)
+
+-   Virginia: [Chronic Wasting Disease \| Virginia DWR](https://dwr.virginia.gov/wildlife/diseases/cwd/)
+
+-   West Virginia: [CHRONIC WASTING DISEASE (CWD) (wv.gov)](https://oeps.wv.gov/cwd/pages/default.aspx)
+
+-   Wisconsin:[Sampling for chronic wasting disease (CWD) \| \| Wisconsin DNR](https://dnr.wisconsin.gov/topic/WildlifeHabitat/registersample.html)
+
+-   Wyoming: [Wyoming Game and Fish Department - Chronic Wasting Disease in Wyoming Wildlife](https://wgfd.wyo.gov/Wildlife-in-Wyoming/More-Wildlife/Wildlife-Disease/Chronic-Wasting-Disease)
+
+## Acknowledgements
+
+We would like to acknowledge and thank Dr. Chris Merkord for his help and guidance on our project.

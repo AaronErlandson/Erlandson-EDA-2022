@@ -6,6 +6,8 @@ Prodject title: Exploring Chronic Wasting Disease in Minnesota and the United St
 
 Project Authors: Aaron Erlandson, Thomas Knutson
 
-Revised Abstract: This is the revised abstract for this project
+**Abstract**
+
+For this prodject
 
 Table of Conents: File 1 File 2 File 3 File 4
