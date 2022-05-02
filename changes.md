@@ -1,6 +1,6 @@
 # Erlandson-EDA-2022
 
-**Introductory sentence**: This is the repository for the final product of the Erlandson/Knutson CWD EDA project
+**Introductory sentence**: This is the repository for the individual submission of the Erlandson/Knutson CWD EDA project.
 
 **Prodject title:** Exploring Chronic Wasting Disease in Minnesota and the United States
 
