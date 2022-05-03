@@ -377,6 +377,10 @@ Figure 15: U.S. counties containing infections in captive cervids
 
 Richards, B.J., 2021, Chronic Wasting Disease distribution in the United States by state and county: U.S. Geological Survey data release, <https://doi.org/10.5066/P9HQKKFO>.
 
+RStudio Team (2020). RStudio: Integrated Development for R. RStudio, PBC, Boston, MA URL <http://www.rstudio.com/>.
+
+Wickham, H., Averick, M., Bryan, J., Chang, W., McGowan, L., François, R., Grolemund, G., Hayes, A., Henry, L., Hester, J., Kuhn, M., Pedersen, T., Miller, E., Bache, S., Müller, K., Ooms, J., Robinson, D., Seidel, D., Spinu, V., … Yutani, H. (2019). Welcome to the tidyverse. *Journal of Open Source Software*, *4*(43), 1686.
+
 To see the list of state agencies we used to collect our national data as well as a map of Minnesota permit zones, scan this QR to visit the GitHub repository for this study where you can view this information.
 
 -   Minnesota: [Chronic wasting disease management \| Minnesota DNR (state.mn.us)](https://www.dnr.state.mn.us/cwd/index.html)
