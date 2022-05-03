@@ -91,7 +91,7 @@ ggplot(data = cwdpositive) +
 
 {r Figure 7, fig.height=3, fig.width=5}
 #Figure 7
-# Bar chart of total_collected_samples vs year
+# Bar chart of total collected samples vs year
 ggplot(data = usa_cwd,
        mapping = aes(x = year)) +
   geom_col(mapping = aes(y = total_collected_samples), fill = "#a6192e")+
@@ -99,7 +99,7 @@ ggplot(data = usa_cwd,
 
 {r Figure 8, fig.height=4, fig.width=5.5}
 #Figure 8
-# Bar chart showing state vs total_positive_samples vs states
+# Bar chart showing state vs total positive samples vs states
 usa_cwd %>%
   group_by(state) %>% 
   summarise(total_positive_samples = sum(total_positive_samples)) %>% 
@@ -113,7 +113,7 @@ usa_cwd %>%
 
 {r Figure 9, fig.height=3, fig.width=5}
 #Figure 9
-# Bar chart of total_positive_samples vs year
+# Bar chart of total positive samples vs year
 ggplot(data = usa_cwd,
        mapping = aes(x = year)) +
   geom_col(mapping = aes(y = total_positive_samples), fill = "#a6192e") +
@@ -121,14 +121,14 @@ ggplot(data = usa_cwd,
 
 {r Figure 10, fig.height=3, fig.width=5}
 #Figure 10
-# Bar chart showing species vs total_positive_samples
+# Bar chart showing species vs total positive samples
 ggplot(data = usa_cwd,
        mapping = aes(x = species)) +
   geom_col(mapping = aes(y = total_positive_samples), fill = "#a6192e")+
   labs(y = "Total Positive Samples", title = "Total Positive Samples Per Year Per Species", x = "Year")
 
 #Figure 11
-# Bar chart showing species vs total_collected_samples
+# Bar chart showing species vs total collected samples
 ggplot(data = usa_cwd,
        mapping = aes(x = species)) +
   geom_col(mapping = aes(y = total_collected_samples), fill = "#a6192e")+
@@ -136,7 +136,7 @@ ggplot(data = usa_cwd,
 
 {r Figure 12, fig.height=4, fig.width=6}
 #Figure 12
-#Map of States infected Free Ranging
+#Map of positive cases in wild cervids by state
 states %>% 
   left_join(distributionofcwdinunitedstates, by = c("state_name"="State")) %>% 
   ggplot(mapping = aes(long, lat, group = group, fill = `Free-ranging cervids`)) +
@@ -148,7 +148,7 @@ states %>%
 
 {r Figure 13, fig.height=4, fig.width=6}
 #Figure 13
-#Map of captive cervids by state
+#Map of positive samples in captive cervids by state
 states %>% 
   left_join(distributionofcwdinunitedstates, by = c("state_name"="State")) %>% 
   ggplot(mapping = aes(long, lat, group = group, fill = `Captive cervids`)) +
@@ -160,7 +160,7 @@ states %>%
 
 {r Figure 14, fig.height=4, fig.width=6}
 #Figure 14
-#Wild County Data, works, just need correct size.
+#Map of United State countys with positive cases in wild cervids
 countydata <- counties %>%
   left_join(wildcountydata %>%
               mutate(Wild=1, County=paste0(County," County")), 
@@ -174,7 +174,7 @@ ggplot(countydata, mapping = aes(long, lat, group = group, fill = Wild)) +
 
 {r Figure 15, fig.height=4, fig.width=6}
 #Figure 15
-#Counties Captive, works
+#Map of United State countys with positive cases in captive cervids
 captive <- counties %>%
   left_join(captivecountydata %>%
               mutate( County=paste0(County," County")), 
