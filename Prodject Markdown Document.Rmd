@@ -74,7 +74,7 @@ Minnesota State University Moorhead Biosciences Department
 
 -   To collect our country wide data, we went to each state's Department of Natural Resources website, and used their public testing results.
 
-    -   We gathered data for the total samples taken, total positive, the species of the deer, and the year and state the sample was taken in.
+    -   We gathered data for the total samples taken, total positive samples, the species of the deer, the year and state the sample was taken in.
 
         -   Once we collected all of our data, we gathered it into a Google Sheet, combined all of the data from all of the analyzed states into one table, transferred it into RStudio, and used R and RStudio to analyze our data and create our graphs.
 
