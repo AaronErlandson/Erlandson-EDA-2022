@@ -62,11 +62,11 @@ minnesotayearlysamplingdata %>%
 {r Figure 3, fig.height=3, fig.width=5}
 #Figure 3
 #State total positive case results based on the zone the sample was collected in
-cwdpositive %>%
-  count(Year, permitarea) %>% 
+minnesotayearlysamplingdata %>%
   ggplot() + 
-  geom_col(mapping = aes(x = Year, y = n, fill = permitarea))+
-  labs(y="Positive Cases", title = "MN Yearly Cases by Permit Area", fill = "Permit Area")
+  geom_col(mapping = aes(x = Year, y = Positive, fill = `Zones Tested`))+
+  theme(axis.text.x = element_text(angle = 90)) +
+  labs(y="Positive Cases", title = "MN Yearly Cases by Sample Collection Zone", fill = "Zones Tested",)
 
 {r Figure 4, fig.height=3, fig.width=5}
 #Figure 4
