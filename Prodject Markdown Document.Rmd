@@ -83,7 +83,7 @@ Minnesota State University Moorhead Biosciences Department
 ## Results
 
 ```{r read data and Figure 1, fig.height=4, fig.width=5, message=FALSE, warning=FALSE}
-#Thomas' stuff
+#Loading packages
 library(googlesheets4)
 library(tidyverse)
 library(urbnmapr)
@@ -98,7 +98,7 @@ distributionofcwdinunitedstates <- read_sheet('https://docs.google.com/spreadshe
 
 minnesotayearlysamplingdata <- read_sheet  ('https://docs.google.com/spreadsheets/d/1ABj6j_GxRa1dpEzdP5ipZHaDyJgaZrYWtITForcFfW4/edit#gid=0')                                            
 
-#Aaron's data stuff
+#USA CWD
 usa_cwd <- read_sheet("https://docs.google.com/spreadsheets/d/18nwJNkR9APotdyceGLIBKdA8ktHZqGjZSj1FsKNT7KY/edit#gid=0")
 
 #Data for captive cases by county for national map
@@ -281,7 +281,7 @@ Figure 13: U.S. states containing infection in captive cervids
 
 ```{r Figure 14, fig.height=4, fig.width=6}
 #Figure 14
-#Wild County Data, works, just need correct size.
+#Map of positive CWD cases in wild cervids in US counties
 countydata <- counties %>%
   left_join(wildcountydata %>%
               mutate(Wild=1, County=paste0(County," County")), 
@@ -299,7 +299,7 @@ Figure 14: U.S. counties containing infections in wild cervids
 
 ```{r Figure 15, fig.height=4, fig.width=6}
 #Figure 15
-#Counties Captive, works
+#Map of positive CWD cases in captive cervids US counties
 captive <- counties %>%
   left_join(captivecountydata %>%
               mutate( County=paste0(County," County")), 
@@ -311,12 +311,6 @@ ggplot(captive, mapping = aes(long, lat, group = group, fill = Count)) +
        title="Captive Cervid Infections by County")
 ```
 
-Figure 15: U.S. counties containing infections in captive cervids
-
-```{r}
-#Mean
-```
-
 ## Discussion
 
 -   Landscape of CWD in the United States
@@ -326,8 +320,6 @@ Figure 15: U.S. counties containing infections in captive cervids
     -   Our results also show that the amount of positive CWD cases is increasing over time.
 
     -   Testing should continue to be done in all states with confirmed cases in order to help track the spread of CWD.
-
-<!-- -->
 
 -   Data Acquisition
 
